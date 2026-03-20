@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Eid Mubarak</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+    color: white;
+    overflow-y: auto; /* ✅ scroll fix */
+    text-align: center;
+}
+
+/* Moon */
+.moon {
+    position: absolute;
+    top: 60px;
+    right: 80px;
+    width: 110px;
+    height: 110px;
+    background: #f5f3ce;
+    border-radius: 50%;
+    box-shadow: 0 0 60px #fff;
+}
+
+/* Stars */
+.star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from {opacity: 0.3;}
+    to {opacity: 1;}
+}
+
+/* Container */
+.container {
+    position: relative;
+    margin-top: 150px; /* ✅ scroll space */
+    margin-bottom: 100px;
+    width: 90%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    font-size: 45px;
+    text-shadow: 0 0 20px gold;
+}
+
+.typing {
+    font-size: 20px;
+    margin-top: 20px;
+    line-height: 1.7;
+    border-right: 2px solid white;
+    display: inline-block;
+    white-space: pre-line;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {border-color: transparent;}
+}
+
+.name {
+    margin-top: 25px;
+    font-size: 20px;
+    color: gold;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px gold; }
+    to { text-shadow: 0 0 25px gold, 0 0 50px orange; }
+}
+
+.btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background: gold;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+input {
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    margin-top: 15px;
+    width: 80%;
+    text-align: center;
+}
+
+/* Firework */
+.firework {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: gold;
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    to {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+    }
+}
+
+/* Hearts */
+@keyframes floatUp {
+    from {transform: translateY(0); opacity:1;}
+    to {transform: translateY(-100vh); opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="moon"></div>
+
+<div class="container">
+    <h1>🌙 Eid Mubarak 🎉</h1>
+
+    <div class="typing" id="text"></div>
+
+    <input type="text" id="username" placeholder="Apna naam likho...">
+
+    <button class="btn" onclick="setName()">✨ Set Name</button>
+
+    <div class="name">
+        ✨ Mere taraf se Eid Mubarak ✨ <br>
+        — Noor Hasan 💖
+    </div>
+
+    <button class="btn" onclick="boom()">🎆 Celebrate</button>
+    <button class="btn" onclick="playMusic()">🎵 Music</button>
+    <button class="btn" onclick="shareWhatsApp()">📤 Share</button>
+</div>
+
+<audio id="music" preload="auto" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2023/03/21/audio_7b6a7c7bdf.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Stars
+for(let i=0;i<120;i++){
+    let star = document.createElement("div");
+    star.className="star";
+    star.style.top = Math.random()*100 + "%";
+    star.style.left = Math.random()*100 + "%";
+    document.body.appendChild(star);
+}
+
+// Typing
+let message = `Chand ki roshni, apno ka pyar,
+Har khushi ho aapke paas har baar ❤️
+
+Eid ka din laaye khushiyan hazaar,
+Mubarak ho aapko Eid ka tyohar 🌙✨`;
+
+let i = 0;
+function type() {
+    if(i < message.length){
+        document.getElementById("text").innerHTML += message.charAt(i);
+        i++;
+        setTimeout(type, 35);
+    }
+}
+type();
+
+// Fireworks
+function createFirework(x, y){
+    for(let i=0;i<30;i++){
+        let f = document.createElement("div");
+        f.className="firework";
+        f.style.left = x + "px";
+        f.style.top = y + "px";
+        f.style.setProperty('--x', (Math.random()*200-100)+'px');
+        f.style.setProperty('--y', (Math.random()*200-100)+'px');
+        document.body.appendChild(f);
+        setTimeout(()=>f.remove(),1000);
+    }
+}
+
+function boom(){
+    createFirework(window.innerWidth/2, window.innerHeight/2);
+}
+
+// Music
+let started = false;
+
+function playMusic(){
+    document.getElementById("music").play();
+}
+
+document.addEventListener("click", function(e){
+    if(!started){
+        document.getElementById("music").play();
+        started = true;
+    }
+    createFirework(e.clientX, e.clientY);
+});
+
+// Name
+function setName(){
+    let name = document.getElementById("username").value;
+    if(name.trim() !== ""){
+        document.querySelector(".name").innerHTML =
+        `✨ Mere taraf se Eid Mubarak ✨ <br> — ${name} 💖`;
+    }
+}
+
+// WhatsApp share
+function shareWhatsApp(){
+    let text = "🌙 Eid Mubarak! 🎉\nDekho ye special wish 👉 ";
+    let url = window.location.href;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text + url)}`);
+}
+
+// Hearts
+setInterval(()=>{
+    let heart = document.createElement("div");
+    heart.innerHTML = "💖";
+    heart.style.position = "absolute";
+    heart.style.left = Math.random()*100 + "%";
+    heart.style.top = "100%";
+    heart.style.fontSize = "20px";
+    heart.style.animation = "floatUp 4s linear";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
+}, 800);
+</script>
+
+</body>
+</html>
